@@ -10,7 +10,7 @@ create_venv() {
 install() {
     create_venv
 	if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-	if [ ! -f requirements.txt ]; then pip install --upgrade pip; pip install streamlit openai requests python-dotenv watchdog ; pip freeze > requirements.txt; fi
+	if [ ! -f requirements.txt ]; then pip install --upgrade pip; pip install streamlit openai requests python-dotenv ; pip freeze > requirements.txt; fi
 }
 
 requirements() {

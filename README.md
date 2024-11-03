@@ -4,7 +4,7 @@ AI Video and Text Generator using Rhymes' Aria and Allegro models.
 
 ## Introduction
 
-**VitexBrain** is an innovative application that leverages the cutting-edge AI models [Aria](https://rhymes.ai/blog-details/aria-first-open-multimodal-native-moe-model) and [Allegro](https://rhymes.ai/blog-details/allegro-advanced-video-generation-model) by [Rhymes.ai](https://www.rhymes.ai/) to generate high-quality answers and videos from text prompts. This tool is designed to empower developers, researchers, and businesses by providing a seamless and efficient way to create multimodal content. Whether you need to generate videos from scratch or enhance existing content, VitexBrain is your go-to solution for AI-driven creativity.
+[VitexBrain](https://vitexbrain.streamlit.app/) is an innovative application that leverages the cutting-edge AI models [Aria](https://rhymes.ai/blog-details/aria-first-open-multimodal-native-moe-model) and [Allegro](https://rhymes.ai/blog-details/allegro-advanced-video-generation-model) by [Rhymes.ai](https://www.rhymes.ai/) to generate high-quality answers and videos from text prompts. This tool is designed to empower developers, researchers, and businesses by providing a seamless and efficient way to create multimodal content. Whether you need to generate videos from scratch or enhance existing content, VitexBrain is your go-to solution for AI-driven creativity.
 
 ## Key Features
 
@@ -63,7 +63,11 @@ sh scripts/run_app.sh run
 
 Go to your favorite Browser and open the URL provided by the application.
 
-[http://localhost:8501](http://localhost:8501)
+* Locally:<BR/>
+  [http://localhost:8501](http://localhost:8501)
+
+* Official App:<BR/>
+  [https://vitexbrain.streamlit.app/](https://vitexbrain.streamlit.app/)
 
 ### Text-to-Video Generation
 
