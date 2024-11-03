@@ -12,7 +12,7 @@ from openai import OpenAI
 DEBUG = True
 REFINE_VIDEO_PROMPT = False
 CONVERSATION_DB_PATH = "./db/conversations.json"
-CONVERSATION_LENGTH = 50
+CONVERSATION_TITLE_LENGTH = 50
 DEFAULT_SUGGESTIONS = {
     "s1": "Step-by-step tutorial to make tea, presented in an animated"
     " format",
@@ -47,8 +47,30 @@ def get_default_resultset() -> dict:
 
 
 def get_date_time(timestamp: int):
+    """
+    Returns a formatted date and time
+    """
     return time.strftime("%Y-%m-%d %H:%M:%S",
                          time.localtime(timestamp))
+
+
+def set_new_id(id: str = None):
+    """
+    Set the new id global variable
+    """
+    if "new_id" not in st.session_state:
+        st.session_state.new_id = None
+    st.session_state.new_id = id
+
+
+def get_new_id():
+    """
+    Get the new id global variable
+    """
+    if "new_id" in st.session_state:
+        return st.session_state.new_id
+    else:
+        return "No new_id"
 
 
 # Conversations database
@@ -90,6 +112,11 @@ def save_conversation(type: str, question: str, answer: str, id: str = None):
     }
     with open(CONVERSATION_DB_PATH, 'w') as f:
         json.dump(conversation_db, f)
+
+    update_conversations()
+    recycle_suggestions()
+    set_new_id(id)
+    return id
 
 
 def get_conversations():
@@ -419,84 +446,115 @@ def show_buttons():
     st.session_state.show_button = True
 
 
-def video_generation(question: str, result_container: st.container):
+def recycle_suggestions():
+    """
+    Recycle the suggestions from the AI
+    """
+    st.session_state.suggestion = get_suggestions_from_ai()
+
+
+def video_generation(result_container: st.container, question: str = None):
     # hide_buttons()
-    result_container.write("Requesting the videogeneration... "
-                           " please hold on...")
 
-    response = allegro_request_video(question)
-    if response['error']:
-        result_container.write(f"ERROR E-200: {response['error_message']}")
+    if not question:
+        question = st.session_state.question
+
+    if not validate_question(question):
         return
 
-    result_container.write(
-        "Please wait while the video is being generated..."
-        " It can take 2+ minutes..."
-    )
+    with st.spinner("Procesing video generation. It can take 2+ minutes..."):
+        # result_container.write(
+        #     "Requesting the videogeneration... "
+        #     " please hold on..."
+        # )
 
-    response = allegro_check_video_generation(response)
-    if response['error']:
-        result_container.write(f"ERROR E-300: {response['error_message']}")
-        return
+        response = allegro_request_video(question)
+        if response['error']:
+            result_container.write(f"ERROR E-200: {response['error_message']}")
+            return
 
-    if not response.get("video_url"):
-        result_container.write("ERROR E-400: Video generation failed."
-                               " No video URL")
-        return
+        # result_container.write(
+        #     "Please wait while the video is being generated..."
+        #     " please hold on..."
+        # )
 
-    video_url = response["video_url"]
-    save_conversation(
-        type="video",
-        question=question,
-        answer=video_url,
-    )
-    result_container.video(video_url)
-    # show_buttons()
+        response = allegro_check_video_generation(response)
+        if response['error']:
+            result_container.write(
+                f"ERROR E-300: {response['error_message']}")
+            return
+
+        if not response.get("video_url"):
+            result_container.write("ERROR E-400: Video generation failed."
+                                   " No video URL")
+            return
+
+        video_url = response["video_url"]
+        save_conversation(
+            type="video",
+            question=question,
+            answer=video_url,
+        )
+        # result_container.video(video_url)
+        # show_buttons()
+        st.rerun()
 
 
-def text_generation(question: str, result_container: st.container):
+def text_generation(result_container: st.container, question: str = None):
     # hide_buttons()
-    result_container.write("Generating answer...")
 
-    prompt = "{question}"
-    response = aria_query(prompt, question)
-
-    if response['error']:
-        result_container.write(f"ERROR E-100: {response['error_message']}")
+    if not question:
+        question = st.session_state.question
+    if not validate_question(question):
         return
 
-    save_conversation(
-        type="text",
-        question=question,
-        answer=response['response'],
-    )
+    with st.spinner("Procesing text generation..."):
+        # result_container.write("Generating answer...")
 
-    result_container.write(response['response'])
-    # show_buttons()
+        prompt = "{question}"
+        response = aria_query(prompt, question)
+
+        if response['error']:
+            result_container.write(f"ERROR E-100: {response['error_message']}")
+            return
+
+        save_conversation(
+            type="text",
+            question=question,
+            answer=response['response'],
+        )
+
+        # result_container.write(response['response'])
+        # show_buttons()
+        st.rerun()
 
 
 def show_conversations():
     """
     Show the conversations in the side bar
     """
-    with st.sidebar:
-        st.header("Previous answers")
-        for conversation in st.session_state.conversations:
-            col1, col2 = st.columns(2, gap="small")
-            with col1:
-                st.button(conversation['question'][:CONVERSATION_LENGTH],
-                          key=f"{conversation['id']}",
-                          help=conversation['date_time']
-                          )
-            with col2:
-                st.button("X",
-                          key=f"del_{conversation['id']}",
-                          on_click=delete_conversation,
-                          args=(conversation['id'],)
-                          )
+    st.header("Previous answers")
+    for conversation in st.session_state.conversations:
+        col1, col2 = st.columns(2, gap="small")
+        with col1:
+            st.button(
+                conversation['question'][:CONVERSATION_TITLE_LENGTH],
+                key=f"{conversation['id']}",
+                help=conversation['date_time'])
+        with col2:
+            st.button(
+                "x",
+                key=f"del_{conversation['id']}",
+                on_click=delete_conversation,
+                args=(conversation['id'],))
 
 
 def show_conversation_content(id: str, container: st.container):
+    """
+    Show the conversation content
+    """
+    if not id:
+        return
     conversation = get_conversation(id)
     if not conversation:
         container.write("ERROR E-600: Conversation not found")
@@ -509,6 +567,8 @@ def show_conversation_content(id: str, container: st.container):
 
 
 def show_conversation_question(id: str):
+    if not id:
+        return
     conversation = get_conversation(id)
     st.session_state.question = conversation['question']
 
@@ -531,36 +591,55 @@ def main():
     app_name = "VitexBrain"
     maker_name = "The FynBots"
 
+    # Streamlit app code
+    st.set_page_config(
+        page_title=app_name,
+        page_icon=":brain:",
+        layout="wide",
+        initial_sidebar_state="auto",
+    )
+
     if "show_button" not in st.session_state:
         st.session_state.show_button = True
     if "question" not in st.session_state:
         st.session_state.question = ""
 
-    # Streamlit app code
-    st.set_page_config(
-        page_title=app_name,
-        page_icon="🍏"
-    )
+    # Get suggested questions initial value
+    with st.spinner("Loading App..."):
+        if "suggestion" not in st.session_state:
+            st.session_state.suggestion = get_suggestions_from_ai()
 
-    st.title(app_name)
+    # Main content
+
+    st.title(f"{app_name} :brain:")
+    # st.write("This App allows you to generate video or answers from a"
+    #          " text prompt")
 
     # Sidebar
     if "conversations" not in st.session_state:
         update_conversations()
-    show_conversations()
 
-    # Main content
-    st.write("This App allows you to generate video or answers from a"
-             " text prompt")
+    # st.header("I'm your instructor")
+    # head_col1, head_col2 = st.columns(
+    #     2, gap="small",
+    #     vertical_alignment="bottom")
+    # with head_col1:
+    #     head_col1.header("I'm your instructor")
+    # with head_col2:
+    #     head_col2.button(
+    #         ":recycle:",
+    #         key="recycle_suggestions",
+    #         help="Recycle the suggestions from the AI",
+    #     )
 
-    st.header("How can we help you?")
+    if st.session_state.get("recycle_suggestions"):
+        with st.spinner("Recycling suggestions..."):
+            recycle_suggestions()
 
-    # Suggestes questions
-    if "suggestion" not in st.session_state:
-        st.session_state.suggestion = get_suggestions_from_ai()
-
-    sug_col1, sug_col2 = st.columns(2)
-
+    # Show the 4 suggestions in the main section
+    sug_col1, sug_col2, sug_col3 = st.columns(
+        3, gap="small",
+    )
     with sug_col1:
         sug_col1.button(st.session_state.suggestion["s1"], key="s1")
         sug_col1.button(st.session_state.suggestion["s2"], key="s2")
@@ -569,30 +648,32 @@ def main():
         sug_col2.button(st.session_state.suggestion["s3"], key="s3")
         sug_col2.button(st.session_state.suggestion["s4"], key="s4")
 
-    # User input
-    if st.session_state.get("generate_video") or \
-       st.session_state.get("generate_text"):
-        update_conversations()
-    if st.session_state.get("generate_video") or \
-       st.session_state.get("generate_text"):
-        st.session_state.suggestion = get_suggestions_from_ai()
+    with sug_col3:
+        sug_col3.button(
+            ":recycle:",
+            key="recycle_suggestions",
+            help="Recycle suggestions buttons",
+        )
 
+    # Process the suggestion button pushed (must be done before the user input)
     for key in ['s1', 's2', 's3', 's4']:
         if st.session_state.get(key):
             st.session_state.question = st.session_state.suggestion[key]
             break
 
+    # Show the selected conversarion's question and answer in the main section
+    # (must be done before the user input)
     for conversation in st.session_state.conversations:
         if st.session_state.get(conversation['id']):
             show_conversation_question(conversation['id'])
             break
 
+    # User input
     question = st.text_area(
-        "Question:",
+        "Question / Prompt:",
         st.session_state.question)
 
-    # Buttons
-
+    # generate_video and generate_text Buttons
     if st.session_state.show_button:
         col1, col2 = st.columns(2)
         with col1:
@@ -605,16 +686,33 @@ def main():
 
     result_container = st.empty()
 
+    if "new_id" in st.session_state:
+        log_debug("main | Showing conversation with " +
+                  f"st.session_state.new_id: {st.session_state.new_id}")
+        show_conversation_question(st.session_state.new_id)
+        show_conversation_content(st.session_state.new_id, result_container)
+        st.session_state.new_id = None
+
     # Check buttons pushed
 
+    with st.sidebar:
+        st.sidebar.write(
+            f"**{app_name}** allows you to generate video or answers from a"
+            " text prompt")
+
+        # Show the conversations in the side bar
+        show_conversations()
+
+    # Process the generate_video button pushed
     if st.session_state.get("generate_video"):
-        if validate_question(question):
-            video_generation(st.session_state.question, result_container)
+        video_generation(result_container, question)
 
+    # Process the generate_text button pushed
     if st.session_state.get("generate_text"):
-        if validate_question(question):
-            text_generation(st.session_state.question, result_container)
+        text_generation(result_container, question)
 
+    # Show the selected conversation's question and answer in the
+    # main section
     for conversation in st.session_state.conversations:
         if st.session_state.get(conversation['id']):
             show_conversation_content(conversation['id'], result_container)

@@ -9,9 +9,10 @@ AI Video and Text Generator using Rhymes' Aria and Allegro models.
 ## Key Features
 
 * Multimodal Native.
-* Seamless Integration: Processes text, and videos with high-quality results.
+* Seamless Integration: Processes text and videos with high-quality results.
 * Versatile Outputs: Generates videos from text, and answers questions from text prompts.
 * Lightning-Fast Video Processing: Captures and captions 256-frame videos in just 10 seconds.
+* Prompts suggestions generates from AI on each form submission and recycle button to refresh them.
 * Customizable: Fully available for developers to modify and extend.
 * Collaborative: Encourages open-source collaboration and innovation.
 
