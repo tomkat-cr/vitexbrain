@@ -8,13 +8,23 @@ AI Video and Text Generator using Rhymes' Aria and Allegro models.
 
 ## Key Features
 
-* Multimodal Native.
+* AI-Powered Guidance using Aria and Allegro MODELS.
+* Gives quick, step-by-step instructions in text and video, customized for each task.
 * Seamless Integration: Processes text and videos with high-quality results.
-* Versatile Outputs: Generates videos from text, and answers questions from text prompts.
-* Lightning-Fast Video Processing: Captures and captions 256-frame videos in just 10 seconds.
 * Prompts suggestions generates from AI on each form submission and recycle button to refresh them.
 * Customizable: Fully available for developers to modify and extend.
 * Collaborative: Encourages open-source collaboration and innovation.
+
+## Technology Used
+
+### Aria
+* Is the flagship Mixture-of-Experts model by Rhymes AI, designed for handling multimodal inputs (text, images, video), is open-source and emphasizes efficiency and high performance. 
+* It has Efficient Parameter Utilization: because it activates only 3.9 billion of its 25.3 billion parameters during inference, making it one of the fastest multimodal AI systems.
+* It processes diverse data formats with a 64K-long multimodal context window, offering comprehensive insights, including the ability to caption 256-frame videos in just 10 seconds.
+
+### Allegro
+* It’s Rhymes AI's text-to-video model that transforms text into high-quality videos, optimized for creative industries.
+* With a 3B parameter model size, Allegro efficiently generates 720p resolution video clips in minutes, facilitating rapid content creation for content creators, marketers, and AI researchers.
 
 ## Getting Started
 
