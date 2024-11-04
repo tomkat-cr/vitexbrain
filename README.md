@@ -162,8 +162,6 @@ All questions and answers are available in the side menu.
 
 ![App Screenshot](./assets/Vitexbrain-Screenshot-080.png)
 
-![App Screenshot](./assets/Vitexbrain-Screenshot-090.png)
-
 ## Context
 
 This project was developed as part of the [Aria & Allegro Multimodal Hackathon](https://lablab.ai/event/aria-multimodal-hackathon) organized by [Lablab.ai](https://lablab.ai) and happened on November 1st to 4rd, 2024.
