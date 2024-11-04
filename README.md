@@ -10,12 +10,13 @@ AI Video and Text Generator using Rhymes' Aria and Allegro models.
 
 ## Key Features
 
-* AI-Powered Guidance using Aria and Allegro MODELS.
-* Gives quick, step-by-step instructions in text and video, customized for each task.
-* Seamless Integration: Processes text and videos with high-quality results.
-* Prompts suggestions generated from AI on each form submission and a Recycle button to refresh them.
-* Customizable: Fully available for developers to modify and extend.
-* Collaborative: Encourages open-source collaboration and innovation.
+* AI-Powered guidance using Aria and Allegro models.
+* Seamless Integration: processes text and videos with high-quality results.
+* Video gallery to show the videos generated.
+* Video generation follow-up just in case the video generation fails.
+* Prompt enhancement support.
+* Prompts suggestions generated from AI on each form submission and a button to refresh them.
+* MongoDB and JSON databases support.
 
 ## Technology Used
 

@@ -55,6 +55,7 @@ An enhanced version of the prompt that explicitly:
 
 - When enhancing the prompt for video, think visually. Explicitly describe scenes and transitions.
 - Include directions on how the video content is structured, such as sequence, timing, and visual focus, to guide the AI effectively.
+- Give me just the enhanced version of the prompt, no other text.
 
 *USER PROMPT*
 {question}
@@ -90,6 +91,7 @@ An enhanced version of the prompt with:
 ### Notes:
 - When enhancing the prompt, ensure reasoning precedes any conclusion or answer.
 - Always define how the output should be structured (e.g., format length or elements).
+- Give me just the enhanced version of the prompt, no other text.
 
 *USER PROMPT*
 {question}

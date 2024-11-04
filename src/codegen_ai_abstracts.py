@@ -65,6 +65,11 @@ class LlmProviderAbstract:
         refined_prompt = refined_prompt.replace("\n", " ")
         refined_prompt = refined_prompt.replace("\r", " ")
         refined_prompt = refined_prompt.replace("Refined Prompt:", "")
+        refined_prompt = refined_prompt.replace("Enhanced Prompt (Output):",
+                                                "")
+        refined_prompt = refined_prompt.replace("Enhanced Prompt:", "")
+        refined_prompt = refined_prompt.replace("**Enhanced Prompt**:", "")
+        refined_prompt = refined_prompt.replace("**Enhanced Prompt**", "")
         refined_prompt = refined_prompt.strip()
         refined_prompt = refined_prompt.replace('"', '')
         response['response'] = refined_prompt
