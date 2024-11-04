@@ -7,52 +7,24 @@ from dotenv import load_dotenv
 import uuid
 import streamlit as st
 
-from codegen_utilities import (
+from src.codegen_utilities import (
     log_debug,
     get_date_time,
     get_default_resultset,
 )
 from src.codegen_db import CodegenDatabase
 from src.codegen_ai_utilities import TextToVideoProvider, LlmProvider
-# from src.codegen_ai_provider_rhymes import (
-#     aria_query,
-#     allegro_request_video,
-#     allegro_check_video_generation,
-# )
 
-CONVERSATION_DB_PATH = "./db/conversations.json"
-CONVERSATION_TITLE_LENGTH = 50
-
-VIDEO_GALLERY_COLUMNS = 3
-
-DEFAULT_SUGGESTIONS = {
-    "s1": "Step-by-step tutorial to make tea, presented in an animated"
-    " format",
-    "s2": "Landscape photography of a mountain in the Swiss Alps",
-    "s3": "Give me ideas for the summer vacation in Hawaii",
-    "s4": "Give me the ReactJs code for a AI Assistant,"
-          " using Shadcn/UI",
-}
-
-SUGGESTIONS_PROMPT_TEXT = \
-    "I want {question} suggestions for prompts ideas," \
-    " half for video generation, half for text generation." \
-    "\nGive me just a JSON output with the keys s1, s2, s3, etc, " \
-    "and the values for each suggestion."
-SUGGESTIONS_QTY = 4
-
-
-REFINE_VIDEO_PROMPT_TEXT = \
-    "I want the refined version of the following prompt for the best" \
-    " video generation: {question}" \
-    "\n\nGive me just the refined version of the prompt, " \
-    "no other text."
-
-REFINE_LLM_PROMPT_TEXT = \
-    "I want the refined version of the following prompt for the best" \
-    " response from the llm: {question}" \
-    "\n\nGive me just the refined version of the prompt, " \
-    "no other text."
+from app_streamlit_contants import (
+    CONVERSATION_DB_PATH,
+    CONVERSATION_TITLE_LENGTH,
+    VIDEO_GALLERY_COLUMNS,
+    DEFAULT_SUGGESTIONS,
+    SUGGESTIONS_PROMPT_TEXT,
+    SUGGESTIONS_QTY,
+    REFINE_VIDEO_PROMPT_TEXT,
+    REFINE_LLM_PROMPT_TEXT,
+)
 
 
 # General utilities and functions
@@ -94,12 +66,6 @@ def init_db():
     """
     Initialize the JSON file database
     """
-    # if not os.path.exists(CONVERSATION_DB_PATH):
-    #     with open(CONVERSATION_DB_PATH, 'w') as f:
-    #         json.dump({}, f)
-    # with open(CONVERSATION_DB_PATH) as f:
-    #     conversation_db = json.load(f)
-    # return conversation_db
     db_type = os.getenv('DB_TYPE')
     db = None
     if db_type == 'json':

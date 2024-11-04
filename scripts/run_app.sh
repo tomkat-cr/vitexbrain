@@ -19,7 +19,8 @@ requirements() {
 
 run() {
     install
-	PYTHONPATH=$PYTHONPATH:./src streamlit run src/app_streamlit.py
+	# PYTHONPATH=$PYTHONPATH:./src streamlit run src/app_streamlit.py
+	streamlit run app_streamlit.py
 }
 
 ACTION=$1
