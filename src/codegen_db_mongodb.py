@@ -33,13 +33,20 @@ class MongoDBDatabase:
             items = list(self.collection.find().sort(sort_attr, sort_order))
         else:
             items = list(self.collection.find())
+        # Assign id from _id field
+        for item in items:
+            item['id'] = str(item['_id'])  # Convert ObjectId to str
         return items
 
     def get_item(self, id: str):
         """
         Returns the item from the MongoDB collection
         """
-        return self.collection.find_one({'_id': id})
+        item = self.collection.find_one({'_id': id})
+        if item:
+            item['id'] = str(item['_id'])  # Convert ObjectId to str
+            return item
+        return None
 
     def delete_item(self, id: str):
         """

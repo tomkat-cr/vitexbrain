@@ -179,7 +179,8 @@ class AllegroLlm(LlmProviderAbstract):
                   f"model_params: {model_params}")
 
         response = self.allegro_query(model_params)
-        response['refined_prompt'] = refined_prompt
+        response['refined_prompt'] = refined_prompt \
+            if refined_prompt != question else None
 
         log_debug("allegro_request_video | GENERATION RESULT | " +
                   f"response: {response}")

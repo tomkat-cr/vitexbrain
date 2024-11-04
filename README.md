@@ -59,15 +59,42 @@ cd vitexbrain
 
 ### Create the .env file
 
-Create a `.env` file in the root directory of the project with the following content:
+Create a `.env` file in the root directory of the project:
+
+```bash
+# You can copy the .env.example file in the root directory of the project
+cp .env.example .env
+```
+
+The `.env` file should have the following content:
 
 ```bash
 PYTHON_VERSION=3.10
-RHYMES_ARIA_API_KEY=YOUR_RHYMES_ARIA_API_KEY
-RHYMES_ALLEGRO_API_KEY=YOUR_RHYMES_ALLEGRO_API_KEY
+#
+# LLM parameters
+TEXT_TO_VIDEO_PROVIDER=rhymes
+LLM_PROVIDER=rhymes
+#
+# RHYMES parameters
+RHYMES_ARIA_API_KEY=rhymes_aria_api_key
+RHYMES_ALLEGRO_API_KEY=rhymes_allegro_api_key
+#
+# Database parameters
+DB_TYPE=json
+# DB_TYPE=mongodb
+#
+# JSON database parameters
+JSON_DB_PATH=./db/conversations.json
+#
+# MongoDB database parameters
+# MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net
+# MONGODB_DB_NAME=vitexbrain
+# MONGODB_COLLECTION_NAME=conversations
 ```
 
 Replace `YOUR_RHYMES_ARIA_API_KEY`, and `YOUR_RHYMES_ALLEGRO_API_KEY` with your actual Rhymes Aria API key, and Rhymes Allegro API key, respectively.
+
+To use a MongoDB database, comment out `DB_TYPE=json`, uncomment `# DB_TYPE=mongodb`, and replace `YOUR_MONGODB_URI`, `YOUR_MONGODB_DB_NAME`, and `YOUR_MONGODB_COLLECTION_NAME` with your actual MongoDB URI, database name, and collection name, respectively.
 
 ### Run the Application
 
@@ -90,8 +117,6 @@ Go to your favorite Browser and open the URL provided by the application.
 
 * Official App:<BR/>
   [https://vitexbrain.streamlit.app/](https://vitexbrain.streamlit.app/)
-
-![App Screenshot](./assets/Vitexbrain-Screenshot-2024-11-03-at-10.16.40 AM.png)
 
 ### Text-to-Video Generation
 
@@ -118,6 +143,26 @@ All questions and answers are available in the side menu.
 - The Prompt Suggestions under the title are generated from AI on each form submission and there's a Recycle button to refresh them. It always shows 2 suggestions for text generation and 2 suggestions for video generation.
 - The conversations are stored in a JSON file localted in the `db` folder.
 - Each entry in the side menu has an `x` button to delete it.
+
+## Screenshots
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-010.png)
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-020.png)
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-030.png)
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-040.png)
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-050.png)
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-060.png)
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-070.png)
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-080.png)
+
+![App Screenshot](./assets/Vitexbrain-Screenshot-090.png)
 
 ## Context
 

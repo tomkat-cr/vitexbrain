@@ -419,7 +419,14 @@ def page_1():
 
     # Main content
 
-    st.title(f"{st.session_state.app_name} {st.session_state.app_icon}")
+    tit_col1, tit_col2 = st.columns(2, gap="small",
+                                    vertical_alignment="bottom")
+    with tit_col1:
+        st.title(f"{st.session_state.app_name} {st.session_state.app_icon}")
+    with tit_col2:
+        st.button("Video Gallery",
+                  on_click=set_query_param,
+                  args=("page", "gallery"))
 
     # Suggestions
     if st.session_state.get("recycle_suggestions"):
