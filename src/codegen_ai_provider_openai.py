@@ -43,9 +43,9 @@ def get_openai_api_response(model_params: dict) -> dict:
             model_config[naming.get(key, key)] = int(model_params[key])
     # Process the question and text
     llm_response = client.chat.completions.create(**model_config)
-    log_debug("get_openai_api_response | " +
-              f"{model_params.get('provider', 'N/A')} " +
-              f" LLM response: {llm_response}")
+    # log_debug("get_openai_api_response | " +
+    #           f"{model_params.get('provider', 'N/A')} " +
+    #           f" LLM response: {llm_response}")
     try:
         response['response'] = llm_response.choices[0].message.content
     except Exception as e:
@@ -73,6 +73,7 @@ class OpenaiLlm(LlmProviderAbstract):
             prompt = refined_prompt
 
         model_params = {
+            "provider": self.provider,
             "model": self.model_name,
             "api_key": self.api_key or os.environ.get("OPENAI_API_KEY"),
             "messages": [

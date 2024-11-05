@@ -1,11 +1,15 @@
 """
 MongoDB database
 """
-from pymongo import MongoClient
 import uuid
+import os
+
+from pymongo import MongoClient
+
+from src.codegen_db_abstracts import DatabaseAbstract
 
 
-class MongoDBDatabase:
+class MongoDBDatabase(DatabaseAbstract):
     """
     MongoDB database class
     """
@@ -54,13 +58,19 @@ class MongoDBDatabase:
         """
         self.collection.delete_one({'_id': id})
 
+    def import_data_from_file(self, file_path: str = None):
+        """
+        Import data from a JSON file into the database
+        """
+        if not file_path:
+            file_path = os.environ.get('JSON_DB_PATH')
+        return super().import_data_from_file(file_path)
 
-# Example usage:
-# db = MongoDBDatabase(
-#     uri="mongodb://localhost:27017",
-#     db_name="my_db",
-#     collection_name="my_collection"
-# )
-# db.save_item({"name": "Item 1", "value": 100})
-# item = db.get_item("some_id")
-# db.delete_item("some_id")
+    def export_data_to_file(self, file_path: str = None,
+                            overwrite: bool = False):
+        """
+        Export data from the database to a JSON file
+        """
+        if not file_path:
+            file_path = os.environ.get('JSON_DB_PATH')
+        return super().export_data_to_file(file_path, overwrite)

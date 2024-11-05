@@ -35,7 +35,8 @@ class AriaLlm(LlmProviderAbstract):
             prompt = refined_prompt
 
         model_params = {
-            "model": "aria",
+            "provider": self.provider,
+            "model": self.model_name or "aria",
             "api_key": os.environ.get("RHYMES_ARIA_API_KEY"),
             "base_url": "https://api.rhymes.ai/v1",
             "stop": ["<|im_end|>"],
@@ -51,13 +52,13 @@ class AriaLlm(LlmProviderAbstract):
         }
 
         # Get the OpenAI API response
-        log_debug("aria_query | " +
-                  f"model_params: {model_params}")
+        # log_debug("aria_query | " +
+        #           f"model_params: {model_params}")
         response = get_openai_api_response(model_params)
         response['refined_prompt'] = refined_prompt
 
-        log_debug("aria_query | " +
-                  f"response: {response}")
+        # log_debug("aria_query | " +
+        #           f"response: {response}")
         return response
 
 

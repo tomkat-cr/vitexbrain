@@ -2,6 +2,7 @@
 
 # General utilities
 import time
+import uuid
 
 
 DEBUG = True
@@ -33,3 +34,10 @@ def get_date_time(timestamp: int):
     """
     return time.strftime("%Y-%m-%d %H:%M:%S",
                          time.localtime(timestamp))
+
+
+def get_new_item_id():
+    """
+    Get the new unique item id
+    """
+    return str(uuid.uuid4())

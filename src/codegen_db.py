@@ -1,11 +1,12 @@
 """
 Generic database
 """
+from src.codegen_db_abstracts import DatabaseAbstract
 from src.codegen_db_json import JsonFileDatabase
 from src.codegen_db_mongodb import MongoDBDatabase
 
 
-class CodegenDatabase:
+class CodegenDatabase(DatabaseAbstract):
     """
     Generic database class
     """
@@ -17,6 +18,7 @@ class CodegenDatabase:
             other_data = {}
         self.other_data = other_data
         self.db = None
+        self.db_type = db_type
         if db_type == 'json':
             db_path = self.other_data.get('JSON_DB_PATH')
             if not db_path:

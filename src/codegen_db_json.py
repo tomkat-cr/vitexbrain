@@ -5,8 +5,10 @@ import os
 import json
 import uuid
 
+from src.codegen_db_abstracts import DatabaseAbstract
 
-class JsonFileDatabase:
+
+class JsonFileDatabase(DatabaseAbstract):
     """
     JSON file database class
     """
