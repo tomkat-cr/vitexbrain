@@ -233,23 +233,27 @@ class CodegenStreamlitLib:
                 self.recycle_suggestions()
 
         # Show the 4 suggestions in the main section
-        sug_col1, sug_col2, sug_col3 = container.columns(
-            3, gap="small",
-        )
-        with sug_col1:
-            sug_col1.button(st.session_state.suggestion["s1"], key="s1")
-            sug_col1.button(st.session_state.suggestion["s2"], key="s2")
-
-        with sug_col2:
-            sug_col2.button(st.session_state.suggestion["s3"], key="s3")
-            sug_col2.button(st.session_state.suggestion["s4"], key="s4")
-
-        with sug_col3:
-            sug_col3.button(
-                ":recycle:",
-                key="recycle_suggestions",
-                help="Recycle suggestions buttons",
+        if "error" in st.session_state.suggestion:
+            with st.expander("ERROR loading suggestions..."):
+                st.write(st.session_state.suggestion["error_message"])
+        else:
+            sug_col1, sug_col2, sug_col3 = container.columns(
+                3, gap="small",
             )
+            with sug_col1:
+                sug_col1.button(st.session_state.suggestion["s1"], key="s1")
+                sug_col1.button(st.session_state.suggestion["s2"], key="s2")
+
+            with sug_col2:
+                sug_col2.button(st.session_state.suggestion["s3"], key="s3")
+                sug_col2.button(st.session_state.suggestion["s4"], key="s4")
+
+            with sug_col3:
+                sug_col3.button(
+                    ":recycle:",
+                    key="recycle_suggestions",
+                    help="Recycle suggestions buttons",
+                )
 
         # Process the suggestion button pushed
         # (must be done before the user input)
